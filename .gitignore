@@ -1,0 +1,4 @@
+# Ignore Google API Key File
+googleMapKey.php
+# Ignore npm packages/modules
+node_modules/

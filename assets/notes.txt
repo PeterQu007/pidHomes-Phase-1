@@ -1,0 +1,1 @@
+Excel:: Year Function: =YEAR(IF(LEFT(CELL("format",A11),1)="D",TEXT(A11,"dd/mm/yyyy"),A11))

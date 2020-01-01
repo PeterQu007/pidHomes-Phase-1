@@ -1,0 +1,96 @@
+.large-hero {
+
+	position:relative;
+	border-bottom: 10px solid $mainBlue; /* add 10px wide blue ribon on bottom */
+	
+	
+	&__image{
+		display:block; /* switch inline to block, to remove the gap on the bottom*/
+	}
+	
+	&__text-content {
+	
+		position: absolute;
+		top: 50%;
+		transform: translateY(-35%);
+		left: 0;
+		width: 100%;
+		text-align: center;
+		@mixin atSmall{
+
+		}
+
+
+		@mixin atMedium{
+			transform: translateY(-30%);
+		}
+
+		@mixin atLarge{
+			transform: translateY(-50%);
+		}
+	}
+
+	&__title {
+		
+		font-weight: 600;
+		/*background-color:rgba(9,18,83,0.5);*/
+		color: #fff;
+		font-size: 2.4rem;
+		margin: 0;
+		padding-bottom: 20px;
+		text-shadow: 4px 4px #000;
+		border-bottom: thick solid rgba(255,255,255,.6);
+		opacity: 0;
+		
+		@mixin atSmall{
+			font-size:2.8rem;
+			opacity: 1;
+		}
+
+		@mixin atMedium{
+			font-size: 3.8rem;
+		}
+		
+		@mixin atLarge{
+			font-size: 4.8rem;
+		}
+		
+		
+	}
+
+	&__subtitle{
+		font-weight: 800;
+		color: $mainOrange;
+		font-size: 1.1rem;
+		margin: auto auto;
+		max-width: 30rem;
+		text-shadow: 2px 2px 8px $mainBlue;
+		padding-top: 20px;
+		display: none;
+		
+		@mixin atSmall{ 
+			font-size:2.9rem;
+		};
+		
+	
+	}
+	
+	&__description{
+		color: white;
+		font-size: 1.1rem;
+		font-weight: 500;
+		text-shadow: 2px 2px 4px blue;
+		max-width: 40rem;
+		margin-left: auto;
+		margin-right: auto;
+		padding-bottom: 30px;
+
+		@mixin atSmall{
+			font-size: 1.875rem;
+		}
+	}
+	
+}
+
+
+

@@ -1,0 +1,39 @@
+/* button block */
+
+.btn{
+	background-color: $mainBlue;
+	color:#fff;
+	text-decoration: none;
+	padding: 0.75rem 1.2rem;
+	display: inline-block;
+
+	&--no-padding{
+		background:transparent;
+		padding: 0 20px 0 0;
+		transform: translateY(12px);
+	}
+	
+	&--orange {
+		background-color: $mainOrange;
+	}
+
+	&--blue {
+		background-color: rgba(9,18,83,.7);
+
+	}
+	
+	&--large {
+		font-size: 1rem;
+		padding: 1rem 2.5rem;
+		
+		@mixin atSmall {
+			font-size: 1.25rem;
+		}
+	}
+
+	&--image{
+
+		padding: 0 0 0 0;
+		transform: translateY(18px);
+	}
+}

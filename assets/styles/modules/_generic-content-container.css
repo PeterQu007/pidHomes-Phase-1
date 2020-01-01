@@ -1,0 +1,20 @@
+.generic-content-container{
+	p{
+		font-weight:300;
+		line-height: 1.65;
+		margin: 0 0 1.8rem 0;
+		padding-left: 20px;
+		padding-right:20px;
+
+		@mixin atSmall {
+			font-size: 1.125rem;
+			padding-left: 0px;
+		}
+	}
+
+	p a {
+		font-weight: 700;
+	}
+
+	
+}

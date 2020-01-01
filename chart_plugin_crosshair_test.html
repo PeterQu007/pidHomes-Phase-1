@@ -1,0 +1,752 @@
+<html lang="en-US">
+  <head>
+    <script type="text/javascript">
+      (function() {
+        var container = document.querySelector("#_tcx-dsseda16w9");
+        if (!container) {
+          return;
+        }
+
+        var XHR = XMLHttpRequest.prototype;
+        var send = XHR.send;
+        var open = XHR.open;
+        XHR.open = function(method, url) {
+          this.url = url;
+          return open.apply(this, arguments);
+        };
+        XHR.send = function() {
+          this.addEventListener("load", function() {
+            try {
+              const response = this.response;
+              if (response && response.length) {
+                const firstChar = response[0];
+                if (firstChar === "[" || firstChar === "{") {
+                  const wrapper = document.createElement("div");
+                  wrapper.setAttribute("data-tcx-url", this.url);
+                  wrapper.innerText = response;
+                  container.appendChild(wrapper);
+                }
+              }
+            } catch (err) {
+              // No-op.
+            }
+          });
+          return send.apply(this, arguments);
+        };
+      })();
+    </script>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>chartjs-plugin-trace / sample</title>
+    <link rel="stylesheet" type="text/css" href="index.css" />
+    <link rel="icon" type="image/ico" href="favicon.ico" />
+
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="https://chartjs-plugin-crosshair.netlify.com/chartjs-plugin-crosshair.js"></script>
+    <style type="text/css">
+      body,
+      html {
+        color: #333538;
+        font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+        padding: 0;
+        margin: 0;
+      }
+
+      body {
+        max-width: 800px;
+        margin: auto;
+        padding: 16px 32px;
+      }
+
+      a {
+        color: #f27173;
+        text-decoration: none;
+      }
+
+      a:hover {
+        color: #e25f5f;
+        text-decoration: underline;
+      }
+
+      .btn {
+        background-color: #aaa;
+        border-radius: 4px;
+        color: white;
+        font-weight: 600;
+        padding: 0.25rem 0.75rem;
+      }
+
+      .btn .fa {
+        font-size: 1rem;
+      }
+
+      .btn:hover {
+        background-color: #888;
+        color: white;
+        text-decoration: none;
+      }
+
+      .btn-chartjs {
+        background-color: #f27173;
+      }
+      .btn-chartjs:hover {
+        background-color: #e25f5f;
+      }
+      .btn-docs:hover {
+        background-color: #2793db;
+      }
+      .btn-docs {
+        background-color: #36a2eb;
+      }
+      .btn-docs:hover {
+        background-color: #2793db;
+      }
+      .btn-gh {
+        background-color: #444;
+      }
+      .btn-gh:hover {
+        background-color: #333;
+      }
+
+      .btn-on {
+        border-style: inset;
+      }
+
+      #header {
+        background-size: 40px;
+        text-align: center;
+        padding: 32px 0;
+      }
+
+      #header .title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      #header:before {
+        background-image: url(logo.svg);
+        background-position: left center;
+        background-repeat: no-repeat;
+        background-size: 40px;
+        content: "";
+        display: inline-block;
+        padding: 20px;
+      }
+
+      #header .title .main {
+        color: #f27173;
+        display: inline-block;
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+
+      #header .title .name:before {
+        content: "/";
+        margin-right: 0.5rem;
+      }
+
+      #header .caption {
+        font-size: 1.1rem;
+      }
+
+      #header .links {
+        display: flex;
+        justify-content: center;
+        padding: 8px 0;
+      }
+
+      #header .links a {
+        font-size: 0.85rem;
+        margin: 0.2rem;
+      }
+
+      #header .links .fa:before {
+        margin-right: 0.5em;
+      }
+
+      .samples-category {
+        display: inline-block;
+        margin-bottom: 32px;
+        vertical-align: top;
+        width: 25%;
+      }
+
+      .samples-category > .title {
+        color: #aaa;
+        font-weight: 300;
+        font-size: 1.5rem;
+      }
+
+      .samples-category:hover > .title {
+        color: black;
+      }
+
+      .samples-category > .items {
+        padding: 8px 0;
+      }
+
+      .samples-entry {
+        padding: 0 0 4px 0;
+      }
+
+      .samples-entry > .title {
+        font-weight: 700;
+      }
+
+      .split {
+        width: 50%;
+        float: left;
+        position: relative;
+      }
+
+      .chart {
+        clear: both;
+        position: relative;
+      }
+
+      .reset-zoom {
+        position: absolute;
+        top: 50px;
+        right: 30px;
+      }
+
+      @media (max-width: 640px) {
+        #header {
+          padding: 8px 0;
+        }
+        .samples-category {
+          width: 33%;
+        }
+      }
+
+      @media (max-width: 512px) {
+        #header .caption {
+          font-size: 1.05rem;
+        }
+        #header .title .name {
+          display: none;
+        }
+        #header .links a {
+          flex-direction: column;
+        }
+        #header .links .fa {
+          margin: 0;
+        }
+        .samples-category {
+          width: 50%;
+        }
+      }
+
+      @media (max-width: 384px) {
+        .samples-category {
+          width: 100%;
+        }
+      }
+    </style>
+    <style type="text/css">
+      /* Chart.js */
+      @keyframes chartjs-render-animation {
+        from {
+          opacity: 0.99;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }
+
+      .chartjs-render-monitor {
+        animation: chartjs-render-animation 1ms;
+      }
+
+      .chartjs-size-monitor,
+      .chartjs-size-monitor-expand,
+      .chartjs-size-monitor-shrink {
+        position: absolute;
+        direction: ltr;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        overflow: hidden;
+        pointer-events: none;
+        visibility: hidden;
+        z-index: -1;
+      }
+
+      .chartjs-size-monitor-expand > div {
+        position: absolute;
+        width: 1000000px;
+        height: 1000000px;
+        left: 0;
+        top: 0;
+      }
+
+      .chartjs-size-monitor-shrink > div {
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        left: 0;
+        top: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="header">
+      <div class="title">
+        <span class="main">chartjs-plugin-crosshair</span>
+        <span class="name">Sample</span>
+      </div>
+      <div class="caption">
+        <a href="http://www.chartjs.org">Chart.js</a>
+        plugin to draw crosshair lines, interpolate values and zoom
+      </div>
+      <div class="links">
+        <a class="btn btn-docs" href="/">
+          Documentation
+        </a>
+        <a
+          class="btn btn-gh"
+          href="https://github.com/abelheinsbroek/chartjs-plugin-crosshair"
+        >
+          GitHub
+        </a>
+      </div>
+    </div>
+    <h3>Basic Example</h3>
+    <p>Try dragging to zoom in!</p>
+    <div class="chart">
+      <div class="chartjs-size-monitor">
+        <div class="chartjs-size-monitor-expand">
+          <div class=""></div>
+        </div>
+        <div class="chartjs-size-monitor-shrink">
+          <div class=""></div>
+        </div>
+      </div>
+      <canvas
+        id="chart1"
+        style="display: block; width: 800px; height: 400px;"
+        width="800"
+        height="400"
+        class="chartjs-render-monitor"
+      ></canvas>
+    </div>
+    <h3>Linked Charts</h3>
+    <div class="split">
+      <div class="chartjs-size-monitor">
+        <div class="chartjs-size-monitor-expand">
+          <div class=""></div>
+        </div>
+        <div class="chartjs-size-monitor-shrink">
+          <div class=""></div>
+        </div>
+      </div>
+      <canvas
+        id="chart2"
+        width="400"
+        height="200"
+        class="chartjs-render-monitor"
+        style="display: block; width: 400px; height: 200px;"
+      ></canvas>
+    </div>
+    <div class="split">
+      <div class="chartjs-size-monitor">
+        <div class="chartjs-size-monitor-expand">
+          <div class=""></div>
+        </div>
+        <div class="chartjs-size-monitor-shrink">
+          <div class=""></div>
+        </div>
+      </div>
+      <canvas
+        id="chart3"
+        width="400"
+        height="200"
+        class="chartjs-render-monitor"
+        style="display: block; width: 400px; height: 200px;"
+      ></canvas>
+    </div>
+    <div class="chart">
+      <div class="chartjs-size-monitor">
+        <div class="chartjs-size-monitor-expand">
+          <div class=""></div>
+        </div>
+        <div class="chartjs-size-monitor-shrink">
+          <div class=""></div>
+        </div>
+      </div>
+      <canvas
+        id="chart4"
+        width="800"
+        height="400"
+        class="chartjs-render-monitor"
+        style="display: block; width: 800px; height: 400px;"
+      ></canvas>
+    </div>
+    <h3>Time chart with dynamic loading of new data on zoom</h3>
+    <p>Try dragging to zoom into this endless Weierstrass function</p>
+    <div class="chart">
+      <div class="chartjs-size-monitor">
+        <div class="chartjs-size-monitor-expand">
+          <div class=""></div>
+        </div>
+        <div class="chartjs-size-monitor-shrink">
+          <div class=""></div>
+        </div>
+      </div>
+      <canvas
+        id="chart6"
+        width="800"
+        height="400"
+        class="chartjs-render-monitor"
+        style="display: block; width: 800px; height: 400px;"
+      ></canvas>
+    </div>
+    <h3>Panning Zoom</h3>
+    <p>Use left and right arrows to pan!</p>
+    <div class="chart">
+      <div class="chartjs-size-monitor">
+        <div class="chartjs-size-monitor-expand">
+          <div class=""></div>
+        </div>
+        <div class="chartjs-size-monitor-shrink">
+          <div class=""></div>
+        </div>
+      </div>
+      <canvas
+        id="chart5"
+        width="800"
+        height="400"
+        class="chartjs-render-monitor"
+        style="display: block; width: 800px; height: 400px;"
+      ></canvas>
+    </div>
+
+    <script>
+      function generateDataset(shift, label, color) {
+        var data = [];
+        var x = 0;
+
+        while (x < 30) {
+          data.push({ x: x, y: Math.sin(shift + x / 3) });
+          x += Math.random();
+        }
+
+        var dataset = {
+          backgroundColor: color,
+          borderColor: color,
+          showLine: true,
+          fill: false,
+          pointRadius: 2,
+          label: label,
+          data: data,
+          lineTension: 0,
+          interpolate: true
+        };
+        return dataset;
+      }
+
+      var chart1 = new Chart(
+        document.getElementById("chart1").getContext("2d"),
+        {
+          type: "scatter",
+          options: {
+            plugins: {
+              crosshair: {
+                sync: {
+                  enabled: false
+                }
+              }
+            },
+
+            tooltips: {
+              mode: "interpolate",
+              intersect: false,
+              callbacks: {
+                title: function(a, d) {
+                  return a[0].xLabel.toFixed(2);
+                },
+                label: function(i, d) {
+                  return (
+                    d.datasets[i.datasetIndex].label +
+                    ": " +
+                    i.yLabel.toFixed(2)
+                  );
+                }
+              }
+            }
+          },
+          data: {
+            datasets: [
+              generateDataset(0, "A", "red"),
+              generateDataset(1, "B", "green"),
+              generateDataset(2, "C", "blue")
+            ]
+          }
+        }
+      );
+
+      var chart2 = new Chart(
+        document.getElementById("chart2").getContext("2d"),
+        {
+          type: "scatter",
+          options: {
+            tooltips: {
+              mode: "interpolate",
+              intersect: false,
+              callbacks: {
+                title: function(a, d) {
+                  return a[0].xLabel.toFixed(2);
+                },
+                label: function(i, d) {
+                  return (
+                    d.datasets[i.datasetIndex].label +
+                    ": " +
+                    i.yLabel.toFixed(2)
+                  );
+                }
+              }
+            }
+          },
+          data: {
+            datasets: [generateDataset(0, "A", "red")]
+          }
+        }
+      );
+      var chart3 = new Chart(
+        document.getElementById("chart3").getContext("2d"),
+        {
+          type: "scatter",
+          options: {
+            tooltips: {
+              mode: "interpolate",
+              intersect: false,
+              callbacks: {
+                title: function(a, d) {
+                  return a[0].xLabel.toFixed(2);
+                },
+                label: function(i, d) {
+                  return (
+                    d.datasets[i.datasetIndex].label +
+                    ": " +
+                    i.yLabel.toFixed(2)
+                  );
+                }
+              }
+            }
+          },
+          data: {
+            datasets: [generateDataset(1, "B", "green")]
+          }
+        }
+      );
+      var chart4 = new Chart(
+        document.getElementById("chart4").getContext("2d"),
+        {
+          type: "scatter",
+          options: {
+            tooltips: {
+              mode: "index",
+              intersect: false,
+              callbacks: {
+                title: function(a, d) {
+                  return a[0].xLabel.toFixed(2);
+                },
+                label: function(i, d) {
+                  return (
+                    d.datasets[i.datasetIndex].label +
+                    ": " +
+                    i.yLabel.toFixed(2)
+                  );
+                }
+              }
+            }
+          },
+          data: {
+            datasets: [generateDataset(1, "C", "blue", true)]
+          }
+        }
+      );
+
+      var chart5 = new Chart(
+        document.getElementById("chart5").getContext("2d"),
+        {
+          type: "scatter",
+          options: {
+            plugins: {
+              crosshair: {
+                sync: {
+                  enabled: false
+                },
+                pan: {
+                  incrementer: 3 // Defaults to 5 if not included.
+                }
+              }
+            },
+            tooltips: {
+              mode: "interpolate",
+              intersect: false,
+              callbacks: {
+                title: function(a, d) {
+                  return a[0].xLabel.toFixed(2);
+                },
+                label: function(i, d) {
+                  return (
+                    d.datasets[i.datasetIndex].label +
+                    ": " +
+                    i.yLabel.toFixed(2)
+                  );
+                }
+              }
+            },
+            animation: {
+              duration: 0
+            },
+
+            responsiveAnimationDuration: 0
+          },
+          data: {
+            datasets: [
+              generateDataset(0, "A", "red"),
+              generateDataset(1, "B", "green"),
+              generateDataset(2, "C", "blue")
+            ]
+          }
+        }
+      );
+
+      var panZoom = function(e) {
+        if (e.keyCode === 37) {
+          chart5.panZoom(-5);
+        } else if (e.keyCode === 39) {
+          chart5.panZoom(5);
+        }
+      };
+
+      window.addEventListener("keydown", panZoom);
+
+      function generate(x1, x2) {
+        if (moment.isMoment(x1)) {
+          // translate time to x1, x2
+          x1 =
+            -2 -
+            moment()
+              .add(-2 * 86400, "seconds")
+              .diff(x1, "seconds") /
+              86400;
+          x2 =
+            2 -
+            moment()
+              .add(2 * 86400, "seconds")
+              .diff(x2, "seconds") /
+              86400;
+        }
+
+        var data = [];
+        var x = x1;
+
+        a = 0.7;
+        b = 8;
+
+        t = moment().add(x1 * 86400, "seconds");
+        t2 = moment().add(x2 * 86400, "seconds");
+
+        while (x <= x2) {
+          y = 0;
+          for (var n = 0; n < 10; n++) {
+            y += Math.pow(a, n) * Math.cos(Math.pow(b, n) * 3.14 * x);
+          }
+          data.push({ x: moment().add(x * 86400, "seconds"), y: y });
+
+          x += (x2 - x1) / 100;
+        }
+
+        return data;
+      }
+
+      var chart6 = new Chart(
+        document.getElementById("chart6").getContext("2d"),
+        {
+          type: "scatter",
+          options: {
+            plugins: {
+              crosshair: {
+                sync: {
+                  enabled: false
+                },
+                pan: {
+                  incrementer: 3 // Defaults to 5 if not included.
+                },
+                callbacks: {
+                  afterZoom: function(start, end) {
+                    setTimeout(function() {
+                      chart6.data.datasets[0].data = generate(start, end);
+                      chart6.update();
+                    }, 1000);
+                  }
+                }
+              }
+            },
+            tooltips: {
+              mode: "interpolate",
+              intersect: false,
+              callbacks: {
+                title: function(a, d) {
+                  return a[0].xLabel.format("dd D MMM YYYY HH:mm");
+                },
+                label: function(i, d) {
+                  return (
+                    d.datasets[i.datasetIndex].label +
+                    ": " +
+                    i.yLabel.toFixed(2)
+                  );
+                }
+              }
+            },
+            animation: {
+              duration: 0
+            },
+            scales: {
+              xAxes: [
+                {
+                  type: "time"
+                }
+              ],
+              yAxes: [
+                {
+                  ticks: {
+                    min: -3,
+                    max: 4
+                  }
+                }
+              ]
+            },
+
+            responsiveAnimationDuration: 0
+          },
+          data: {
+            datasets: [
+              {
+                backgroundColor: "red",
+                borderColor: "red",
+                showLine: true,
+                fill: false,
+                label: "function",
+                pointRadius: 0,
+                data: generate(-2, 2),
+                lineTension: 0,
+                interpolate: true
+              }
+            ]
+          }
+        }
+      );
+    </script>
+  </body>
+</html>

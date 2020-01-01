@@ -1,0 +1,111 @@
+/* svg sprite icon css class generator */
+/* svg-sprite github repo docs to check out what is the viarables */
+/* Final Gulp automation template */
+
+
+
+	.icon{
+		background-image: url('../../assets/images/sprites/sprite-971a776d.svg') ;
+	}
+
+	.icon--HomeEvalue{
+		width:64px;
+		height:64px;
+		background-position: 58.44155844155844% 37.05357142857143%;
+	}
+
+	.icon--HomeSearch{
+		width:64px;
+		height:83px;
+		background-position: 58.44155844155844% 0;
+	}
+
+	.icon--Prize{
+		width:64px;
+		height:83px;
+		background-position: 79.22077922077922% 0;
+	}
+
+	.icon--clear-view-escapes{
+		width:142.4px;
+		height:59.53px;
+		background-position: 0 45.08250536175428%;
+	}
+
+	.icon--comment{
+		width:64px;
+		height:64px;
+		background-position: 20.77922077922078% 72.55803571428571%;
+	}
+
+	.icon--facebook{
+		width:21.23px;
+		height:42.01px;
+		background-position: 40.59640220087237% 41.871620797593394%;
+	}
+
+	.icon--fire{
+		width:56px;
+		height:64px;
+		background-position: 40.50632911392405% 72.55803571428571%;
+	}
+
+	.icon--globe{
+		width:64px;
+		height:64px;
+		background-position: 100% 0;
+	}
+
+	.icon--instagram{
+		width:42.01px;
+		height:42.01px;
+		background-position: 75.15379253916785% 66.0717915362413%;
+	}
+
+	.icon--mail{
+		width:64px;
+		height:48px;
+		background-position: 79.22077922077922% 34.583333333333336%;
+	}
+
+	.icon--pqu{
+		width:180px;
+		height:103px;
+		background-position: 0 0;
+	}
+
+	.icon--rain{
+		width:64px;
+		height:64px;
+		background-position: 59.74025974025974% 72.55803571428571%;
+	}
+
+	.icon--sold{
+		width:64px;
+		height:83px;
+		background-position: 0 79.28292682926829%;
+	}
+
+	.icon--star{
+		width:64px;
+		height:64px;
+		background-position: 100% 28.571428571428573%;
+	}
+
+	.icon--twitter{
+		width:51.78px;
+		height:42.06px;
+		background-position: 96.18387358690899% 78.0678214198585%;
+	}
+
+	.icon--wifi{
+		width:60px;
+		height:64px;
+		background-position: 98.71794871794872% 57.142857142857146%;
+	}
+
+	.icon--youtube{
+		width:34.75px;
+		height:42px;
+		background-position: 0 99.8089430894309%;
+	}
