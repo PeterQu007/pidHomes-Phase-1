@@ -56,7 +56,7 @@ $X = set_debug(__FILE__);
 function pidRealty_Files()
 {
     //load js scripts
-    wp_enqueue_script('main-pidrealty-js', get_stylesheet_directory_uri().('/js/scripts-bundled.js'), null, microtime(), true);
+    // wp_enqueue_script('main-pidrealty-js', get_stylesheet_directory_uri().('/js/scripts-bundled.js'), null, microtime(), true);
     wp_enqueue_script('pidHomes-js', get_stylesheet_directory_uri() . ('/js/appjs-bundled.js'), null, microtime(), true);
     //vendor.js file includes all the code from our external libraries
     // wp_enqueue_script('vendor-js', get_stylesheet_directory_uri().("/js/Vendor.js"));
