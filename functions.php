@@ -57,26 +57,23 @@ function pidRealty_Files()
 {
     //load js scripts
     wp_enqueue_script('main-pidrealty-js', get_stylesheet_directory_uri().('/js/scripts-bundled.js'), null, microtime(), true);
-    wp_enqueue_script('secondary-pidrealty-js', get_stylesheet_directory_uri() . ('/js/appjs-bundled.js'), null, microtime(), true);
-    wp_enqueue_script('vendor-js', get_stylesheet_directory_uri().("/temp/scripts/Vendor.js"));
-    wp_enqueue_script('ajax-cors', get_stylesheet_directory_uri(). ("/js/modules/jquery.ajax-cross-origin.min.js"));
+    wp_enqueue_script('pidHomes-js', get_stylesheet_directory_uri() . ('/js/appjs-bundled.js'), null, microtime(), true);
+    //vendor.js file includes all the code from our external libraries
+    // wp_enqueue_script('vendor-js', get_stylesheet_directory_uri().("/js/Vendor.js"));
+    // wp_enqueue_script('ajax-cors', get_stylesheet_directory_uri(). ("/js/modules/jquery.ajax-cross-origin.min.js"));
     wp_enqueue_script('chartjs-crosshair', "//cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js");
-    // wp_enqueue_script('chartjs', 'https://www.jsdelivr.com/package/npm/chart.js');
+    // wp_enqueue_script('CentrisMainFramework', get_theme_file_uri('/js/centris.js'), null, '1.0', true);
+    wp_enqueue_script('font-awesome', '//kit.fontawesome.com/957bcd8e88.js', null, '5.11', true);
     //load css files
     wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
-    // wp_enqueue_style('font-awesome', get_stylesheet_directory_uri().("/assets/lib/fontawesome/css/font-awesome.min.css"));
-    wp_enqueue_style('pidRealty_secondary_style', get_stylesheet_directory_uri().("/temp/styles.css"));
-    //wp_enqueue_style('pidRealty_main_style', get_stylesheet_directory_uri());
+    // wp_enqueue_style('pidRealty_secondary_style', get_stylesheet_directory_uri().("/temp/styles.css"));
+    //load php data for js
     if(!is_home()){
-      // wp_register_script('loadmore', get_stylesheet_directory_uri(). ("/js/loadmore.js" ));
       wp_localize_script('main-pidrealty-js', 'pid_Data', array( 
         'siteurl' => get_site_url(),
         'nonce' => wp_create_nonce('wp_rest'),
         'first_page' => get_pagenum_link(1)
       ));
-      // Enqueued script with localized data.
-      // wp_enqueue_script('loadmore');
-      // alert("not home");
     }
 }
 add_action('wp_enqueue_scripts', 'pidRealty_Files');
@@ -164,12 +161,23 @@ function pageBanner($args = null)
 }
 
 //Add public Query Variable
-add_filter('query_vars', 'add_property_neighborhood_var', 0, 1);
+add_filter('query_vars', 'custom_query_vars_filter', 0, 1);
 
-function add_property_neighborhood_var($vars){
-  $vars[]= 'property-neighborhood'; //, 'property-city', 'school');
+function custom_query_vars_filter($vars){
+  $vars[] = 'property-neighborhood'; //, 'property-city', 'school');
+  $vars[] = 'property-city'; //
+  $vars[] = 'page1';
+  $vars[] = 'page2';
   return $vars;
 }
+
+// function custom_query_vars_filter($vars) {
+//   $vars[] .= 'page1';
+//   $vars[] .= 'page2';
+//   return $vars;
+// }
+// add_filter( 'query_vars', 'custom_query_vars_filter' );
+
 
 /**
  * Add term meta to results of get_terms
@@ -195,12 +203,6 @@ function add_property_neighborhood_var($vars){
 // }
 // add_filter('get_terms', 'be_get_terms_filter', 10, 3);
 
-function custom_query_vars_filter($vars) {
-  $vars[] .= 'page1';
-  $vars[] .= 'page2';
-  return $vars;
-}
-add_filter( 'query_vars', 'custom_query_vars_filter' );
 
 /************
  * NOTICE
