@@ -59,9 +59,11 @@ function pidRealty_Files()
     // wp_enqueue_script('main-pidrealty-js', get_stylesheet_directory_uri().('/js/scripts-bundled.js'), null, microtime(), true);
     wp_enqueue_script('pidHomes-js', get_stylesheet_directory_uri() . ('/js/appjs-bundled.js'), null, microtime(), true);
     //vendor.js file includes all the code from our external libraries
-    // wp_enqueue_script('vendor-js', get_stylesheet_directory_uri().("/js/Vendor.js"));
+    //vendor.js is used for testimonies /features lazy loading in about page
+    wp_enqueue_script('vendor-js', get_stylesheet_directory_uri().("/js/Vendor.js"));
     // wp_enqueue_script('ajax-cors', get_stylesheet_directory_uri(). ("/js/modules/jquery.ajax-cross-origin.min.js"));
     wp_enqueue_script('chartjs-crosshair', "//cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js");
+
     // wp_enqueue_script('CentrisMainFramework', get_theme_file_uri('/js/centris.js'), null, '1.0', true);
     wp_enqueue_script('font-awesome', '//kit.fontawesome.com/957bcd8e88.js', null, '5.11', true);
     //load css files
@@ -69,7 +71,7 @@ function pidRealty_Files()
     // wp_enqueue_style('pidRealty_secondary_style', get_stylesheet_directory_uri().("/temp/styles.css"));
     //load php data for js
     if(!is_home()){
-      wp_localize_script('main-pidrealty-js', 'pid_Data', array( 
+      wp_localize_script('pidHomes-js', 'pid_Data', array( 
         'siteurl' => get_site_url(),
         'nonce' => wp_create_nonce('wp_rest'),
         'first_page' => get_pagenum_link(1)

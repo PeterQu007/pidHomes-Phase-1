@@ -178,6 +178,7 @@ jQuery(function($) {
     // console.log(page_anchor.attr("page_id"));
     // console.log(ajax_session);
     // console.log(data);
+    console.log(pid_Data.siteurl + "/wp-admin/admin-ajax.php");
     $.ajax({
       url: pid_Data.siteurl + "/wp-admin/admin-ajax.php", // AJAX handler
       data: data,

@@ -200,9 +200,6 @@ if (isset($_GET['view'])) {
 
  
   
-  <!-- build:js assets/scripts/App.js -->
-  <script src="<?php echo get_theme_file_uri("/temp/scripts/app.js") ?>"></script>
-  <!-- endbuild -->
   <?php get_footer(); ?>
 </body>
 </html>
